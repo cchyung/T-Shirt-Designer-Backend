@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 from rest_framework import routers
 from django.contrib.admin.views.decorators import staff_member_required
-import views
+from api import views
 
 router = routers.DefaultRouter()
 

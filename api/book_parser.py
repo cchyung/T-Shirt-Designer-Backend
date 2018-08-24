@@ -1,5 +1,5 @@
 from openpyxl import load_workbook
-import models
+from api import models
 
 # utility methods for parsing an excel sheet to populate the database
 
