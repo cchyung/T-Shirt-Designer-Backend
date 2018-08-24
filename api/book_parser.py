@@ -106,7 +106,6 @@ def parse_addons(addons):
         if i >= 1:
             name = addon_row[0].value
             cost = addon_row[1].value
-            print i.__str__() + ": " + name + " " + cost.__str__()
             addon = models.Addon(
                 name=name,
                 cost=cost
