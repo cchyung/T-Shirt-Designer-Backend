@@ -16,9 +16,9 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from django.views import View
 from django import forms
-import models
-import serializers
-import book_parser
+from api import models
+from api import serializers
+from api import book_parser
 
 
 class StyleViewSet(viewsets.ReadOnlyModelViewSet):
