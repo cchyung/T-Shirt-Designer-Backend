@@ -1,1 +1,1 @@
-web: gunicorn tshirtpricetool.wsgi
+web: gunicorn tshirtpricetool.wsgi --log-file -
