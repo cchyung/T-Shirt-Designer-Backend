@@ -8,7 +8,6 @@ def parse_workbook(file_name, clear):
 
     if clear:
         # temp delete all to refresh db
-        print "clearing database"
         models.StyleColor.objects.all().delete()
         models.Style.objects.all().delete()
         models.StyleImage.objects.all().delete()
