@@ -50,11 +50,15 @@ def parse_styles(styles):
                 brand=style_row[0].value,
                 style_id=style_row[1].value,
                 name=style_row[2].value,
-                description=style_row[3].value,
-                colors=color_ids
+                description=style_row[3].value
             )
 
+            # TODO: Find a non hack way to do this lmao
+            # but good job fixing it you dog
             style.save()
+            style.colors = color_ids
+            style.save()
+
 
 
 # creates prices for each style based on price matrix
