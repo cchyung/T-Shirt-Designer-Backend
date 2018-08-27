@@ -51,7 +51,7 @@ def parse_styles(styles):
                 style_id=style_row[1].value,
                 name=style_row[2].value,
                 description=style_row[3].value
-            ) 
+            )
 
             # TODO: Find a non hack way to do this lmao
             # but good job fixing it you dog

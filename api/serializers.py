@@ -29,7 +29,7 @@ class StyleSerializer(serializers.ModelSerializer):
 
     def get_images(self, obj):
         image_set = models.StyleImage.objects.filter(style=obj)
-        if image_set.count > 0:
+        if image_set.count() > 0:
             # get first non null image in set
             for image in image_set:
                 if image.front is not None:
