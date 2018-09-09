@@ -1,16 +1,15 @@
 from __future__ import unicode_literals
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
-from django.http import HttpResponse
 from django.shortcuts import render
+from api import price_calculator
 
 # Create your views here.
 
 # -*- coding: utf-8 -*-
 from django.template import loader
 
-from rest_framework import status, viewsets, generics
+from rest_framework import viewsets, generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
@@ -108,3 +107,19 @@ class UploadBookView(View):
                 'error_message': error_message
             }
         )
+
+
+@api_view(['GET'])
+def calculate_price(request):
+    # validate that correct params have come through
+    style_id = request.GET.get('style')
+    quantities = request.GET.get('quantities')  # in order of increasing size as string of comma separated numbers
+    ink_colors = request.GET.get('inks')
+    addons = request.GET.get('addons')  # as string of comma-separated numbers
+
+    # validate all fields are present
+    if style_id is not None and quantities is not None and ink_colors is not None:
+        price = price_calculator.calculate_price(style_id, quantities, ink_colors, addons)
+        return Response({'price': price})
+    else:
+        return Response({'error': 'fields missing'})

@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^styles/image-list', views.StyleImageList.as_view()),
     url(r'^styles/(?P<style_id>[0-9]+)/images/(?P<color>[\w-]+)$', views.StyleImageDetail.as_view()),
     url(r'^addons', views.AddonListView.as_view()),
-    url(r'^upload-book', staff_member_required(views.UploadBookView.as_view()))
+    url(r'^upload-book', staff_member_required(views.UploadBookView.as_view())),
+    url(r'^calculate-price', views.calculate_price)
 
 ]

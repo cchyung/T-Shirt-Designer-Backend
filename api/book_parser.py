@@ -1,8 +1,8 @@
 from openpyxl import load_workbook
 from api import models
 
-# utility methods for parsing an excel sheet to populate the database
 
+# utility methods for parsing an excel sheet to populate the database
 def parse_workbook(file_name, clear):
     wb = load_workbook(file_name)
 
@@ -58,7 +58,6 @@ def parse_styles(styles):
             style.save()
             style.colors = color_ids
             style.save()
-
 
 
 # creates prices for each style based on price matrix
