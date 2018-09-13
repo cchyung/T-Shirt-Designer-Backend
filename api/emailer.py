@@ -1,12 +1,13 @@
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives, send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from tshirtpricetool.settings.base import get_env_variable
 from api import models
 
 
 def send_report(style_id, quantities, ink_colors, addon_ids, email, comments, price):
-    from_email = 'chyungspice@gmail.com'
-    to_email = ['chyungspice@gmail.com']
+    from_email = get_env_variable('EMAIL_REPORT_FROM')
+    to_emails = [get_env_variable('EMAIL_REPORT_RECIPIENT')]
 
     style = models.Style.objects.get(style_id=style_id)
 
@@ -17,7 +18,7 @@ def send_report(style_id, quantities, ink_colors, addon_ids, email, comments, pr
         'style': style.__str__(),
         'quantities': quantities,
         'ink_colors': ink_colors,
-        'addons': addons,
+        'addons': addons if len(addons) > 0 else 'No Addons',
         'comments': comments,
         'price': price
     }
@@ -25,6 +26,6 @@ def send_report(style_id, quantities, ink_colors, addon_ids, email, comments, pr
     html_content = render_to_string('api/report_email.html', template_vars).replace("\n", "")
     text_content = strip_tags(html_content)
 
-    msg = EmailMultiAlternatives('Report', text_content, from_email, to_email)
+    msg = EmailMultiAlternatives('Report from T Shirt Designer', text_content, from_email, to_emails)
     msg.attach_alternative(html_content, 'text/html')
     msg.send()

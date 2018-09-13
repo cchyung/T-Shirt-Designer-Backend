@@ -136,4 +136,4 @@ def calculate_price(request):
         # return calculated price
         return Response({'price': price})
     else:
-        return Response({'error': 'fields missing'})
+        return Response(status=400, data={'error': 'fields missing'})
