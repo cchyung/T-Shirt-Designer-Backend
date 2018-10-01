@@ -16,6 +16,7 @@ def send_report(style_id, quantities, ink_colors, addon_ids, email, comments, pr
     template_vars = {
         'email': email,
         'style': style.__str__(),
+        'brand': style.brand,
         'quantities': quantities,
         'ink_colors': ink_colors,
         'addons': addons if len(addons) > 0 else 'No Addons',
