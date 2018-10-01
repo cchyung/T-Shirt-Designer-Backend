@@ -36,6 +36,7 @@ def calculate_price(style_id, quantities, ink_colors, addons):
     total_price_per = base_price + addon_price
 
     # total price is the sum of the first 5 sizes * price per + (number of 2XL * price per + 1)
-    total_price = '%.2f'%sum(quantities[:5]) * total_price_per + quantities[5] * (total_price_per + 1)
+    total_price = sum(quantities[:5]) * total_price_per + quantities[5] * (total_price_per + 1)
+    total_price = "%.2f"%total_price
 
     return total_price
