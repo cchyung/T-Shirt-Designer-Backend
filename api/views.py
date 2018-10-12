@@ -12,6 +12,8 @@ from django.template import loader
 from rest_framework import viewsets, generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.parsers import MultiPartParser
 from django.shortcuts import get_object_or_404
 from django.views import View
 from django import forms
@@ -110,30 +112,39 @@ class UploadBookView(View):
         )
 
 
-@api_view(['GET'])
-def calculate_price(request):
-    # validate that correct params have come through
-    style_id = request.GET.get('style')
-    quantity_string = request.GET.get('quantities')  # in order of increasing size as string of comma separated numbers
-    ink_colors = request.GET.get('inks')
-    addon_string = request.GET.get('addons')  # as string of comma-separated numbers
-    comments = request.GET.get('comments')
-    email = request.GET.get('email')
+class CalculatePriceView(APIView):
+    parser_classes = (MultiPartParser, )
 
-    # parse comma separated numbers
-    quantities = [int(x) for x in quantity_string.split(',')]
-    addons = []
-    if addon_string is not None and len(addon_string) > 0:
-        addons = [int(x) for x in addon_string.split(',')]
+    def put(self, request, format=None):
 
-    # validate all fields are present
-    if style_id is not None and quantities is not None and ink_colors is not None:
-        price = price_calculator.calculate_price(style_id, quantities, ink_colors, addons)
+        if 'file' not in request.data:
+            return Response(status=400, data={'error': 'image is missing'})
 
-        # send email report
-        emailer.send_report(style_id, quantities, ink_colors, addons, email, comments, price)
+        image = request.data['file']
 
-        # return calculated price
-        return Response({'price': price})
-    else:
-        return Response(status=400, data={'error': 'fields missing'})
+        # validate that correct params have come through
+        style_id = request.GET.get('style')
+        quantity_string = request.GET.get(
+            'quantities')  # in order of increasing size as string of comma separated numbers
+        ink_colors = request.GET.get('inks')
+        addon_string = request.GET.get('addons')  # as string of comma-separated numbers
+        comments = request.GET.get('comments')
+        email = request.GET.get('email')
+
+        # parse comma separated numbers
+        quantities = [int(x) for x in quantity_string.split(',')]
+        addons = []
+        if addon_string is not None and len(addon_string) > 0:
+            addons = [int(x) for x in addon_string.split(',')]
+
+        # validate all fields are present
+        if style_id is not None and quantities is not None and ink_colors is not None:
+            price = price_calculator.calculate_price(style_id, quantities, ink_colors, addons)
+
+            # send email report
+            emailer.send_report(style_id, quantities, ink_colors, addons, email, comments, price, image)
+
+            # return calculated price
+            return Response({'price': price})
+        else:
+            return Response(status=400, data={'error': 'fields missing'})
