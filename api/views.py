@@ -115,7 +115,7 @@ class UploadBookView(View):
 class CalculatePriceView(APIView):
     parser_classes = (MultiPartParser, )
 
-    def put(self, request, format=None):
+    def post(self, request, format=None):
 
         if 'front' not in request.data or 'back' not in request.data:
             return Response(status=400, data={'error': 'image is missing'})
