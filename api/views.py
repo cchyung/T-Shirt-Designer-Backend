@@ -117,10 +117,11 @@ class CalculatePriceView(APIView):
 
     def put(self, request, format=None):
 
-        if 'file' not in request.data:
+        if 'front' not in request.data or 'back' not in request.data:
             return Response(status=400, data={'error': 'image is missing'})
 
-        image = request.data['file']
+        front_image = request.data['front']
+        back_image = request.data['back']
 
         # validate that correct params have come through
         style_id = request.GET.get('style')
@@ -142,7 +143,7 @@ class CalculatePriceView(APIView):
             price = price_calculator.calculate_price(style_id, quantities, ink_colors, addons)
 
             # send email report
-            emailer.send_report(style_id, quantities, ink_colors, addons, email, comments, price, image)
+            emailer.send_report(style_id, quantities, ink_colors, addons, email, comments, price, front_image, back_image)
 
             # return calculated price
             return Response({'price': price})

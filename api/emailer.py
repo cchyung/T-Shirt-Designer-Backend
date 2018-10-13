@@ -8,7 +8,7 @@ from tshirtpricetool.settings.base import get_env_variable
 from api import models
 
 
-def send_report(style_id, quantities, ink_colors, addon_ids, email, comments, price, image):
+def send_report(style_id, quantities, ink_colors, addon_ids, email, comments, price, front_image, back_image):
     from_email = get_env_variable('EMAIL_REPORT_FROM')
     to_emails = [get_env_variable('EMAIL_REPORT_RECIPIENT')]
 
@@ -25,17 +25,23 @@ def send_report(style_id, quantities, ink_colors, addon_ids, email, comments, pr
         'addons': addons if len(addons) > 0 else 'No Addons',
         'comments': comments,
         'price': price,
-        'image': image.__str__()
+        'front_image': front_image.__str__(),
+        'back_image': back_image.__str__(),
     }
 
     html_content = render_to_string('api/report_email.html', template_vars).replace("\n", "")
     text_content = strip_tags(html_content)
 
-    # embed image
+
     msg = EmailMultiAlternatives('Report from T Shirt Designer', text_content, from_email, to_emails)
-    email_image = MIMEImage(image.file.read())
-    email_image.add_header('Contend-ID', '<design>')
-    msg.attach(email_image)
+
+    # embed images
+    front_email_image = MIMEImage(front_image.file.read())
+    front_email_image.add_header('Content-ID', '<front>')
+    back_email_image = MIMEImage(back_image.file.read())
+    back_email_image.add_header('Content-ID', '<back>')
+    msg.attach(front_email_image)
+    msg.attach(back_email_image)
 
     msg.mixed_subtype = 'related'
     msg.attach_alternative(html_content, 'text/html')
