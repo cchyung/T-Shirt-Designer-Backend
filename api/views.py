@@ -146,6 +146,18 @@ class CalculatePriceView(APIView):
             emailer.send_report(style_id, quantities, ink_colors, addons, email, comments, price, front_image, back_image)
 
             # return calculated price
-            return Response({'price': price})
+            response = Response({'price': price})
+
+            # add cors headers
+            response["Access-Control-Allow-Origin"] = "*"
+            response["Access-Control-Allow-Headers"] = "X-Requested-With, Content-Type"
+            response["Access-Control-Allow-Methods"] = "POST"
+            return response
         else:
-            return Response(status=400, data={'error': 'fields missing'})
+            response = Response(status=400, data={'error': 'fields missing'})
+
+            # add cors headers
+            response["Access-Control-Allow-Origin"] = "*"
+            response["Access-Control-Allow-Headers"] = "X-Requested-With, Content-Type"
+            response["Access-Control-Allow-Methods"] = "POST"
+            return response
