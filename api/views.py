@@ -115,10 +115,14 @@ class UploadBookView(View):
 class CalculatePriceView(APIView):
     parser_classes = (MultiPartParser, )
 
-    def post(self, request, format=None):
+    def post(self, request):
 
         if 'front' not in request.data or 'back' not in request.data:
-            return Response(status=400, data={'error': 'image is missing'})
+            response = Response(status=400, data={'error': 'image is missing'})
+            response["Access-Control-Allow-Origin"] = "*"
+            response["Access-Control-Allow-Headers"] = "X-Requested-With, Content-Type"
+            response["Access-Control-Allow-Methods"] = "POST"
+            return response
 
         front_image = request.data['front']
         back_image = request.data['back']
