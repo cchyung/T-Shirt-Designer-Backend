@@ -150,7 +150,9 @@ class CalculatePriceView(APIView):
             response = Response({'price': price})
 
             # add cors headers
+            response["Access-Control-Allow-Origin"] = "*"
             return response
         else:
             response = Response(status=400, data={'error': 'fields missing'})
+            response["Access-Control-Allow-Origin"] = "*"
             return response
