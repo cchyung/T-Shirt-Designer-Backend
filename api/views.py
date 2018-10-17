@@ -119,9 +119,6 @@ class CalculatePriceView(APIView):
 
         if 'front' not in request.data or 'back' not in request.data:
             response = Response(status=400, data={'error': 'image is missing'})
-            response["Access-Control-Allow-Origin"] = "*"
-            response["Access-Control-Allow-Headers"] = "X-Requested-With, Content-Type"
-            response["Access-Control-Allow-Methods"] = "POST"
             return response
 
         front_image = request.data['front']
@@ -153,15 +150,7 @@ class CalculatePriceView(APIView):
             response = Response({'price': price})
 
             # add cors headers
-            response["Access-Control-Allow-Origin"] = "*"
-            response["Access-Control-Allow-Headers"] = "X-Requested-With, Content-Type"
-            response["Access-Control-Allow-Methods"] = "POST"
             return response
         else:
             response = Response(status=400, data={'error': 'fields missing'})
-
-            # add cors headers
-            response["Access-Control-Allow-Origin"] = "*"
-            response["Access-Control-Allow-Headers"] = "X-Requested-With, Content-Type"
-            response["Access-Control-Allow-Methods"] = "POST"
             return response
