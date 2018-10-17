@@ -119,6 +119,7 @@ class CalculatePriceView(APIView):
 
         if 'front' not in request.data or 'back' not in request.data:
             response = Response(status=400, data={'error': 'image is missing'})
+            response["Access-Control-Allow-Origin"] = "*"
             return response
 
         front_image = request.data['front']
