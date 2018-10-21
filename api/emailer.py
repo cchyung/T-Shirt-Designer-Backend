@@ -5,6 +5,8 @@ from email.mime.image import MIMEImage
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from tshirtpricetool.settings.base import get_env_variable
+import re
+import cStringIO
 from api import models
 
 
@@ -32,18 +34,22 @@ def send_report(style_id, quantities, ink_colors, addon_ids, email, comments, pr
     html_content = render_to_string('api/report_email.html', template_vars).replace("\n", "")
     text_content = strip_tags(html_content)
 
-
     msg = EmailMultiAlternatives('Report from T Shirt Designer', text_content, from_email, to_emails)
 
     # embed images
-    front_email_image = MIMEImage(front_image.file.read())
-    front_email_image.add_header('Content-ID', '<front>')
-    back_email_image = MIMEImage(back_image.file.read())
-    back_email_image.add_header('Content-ID', '<back>')
-    msg.attach(front_email_image)
-    msg.attach(back_email_image)
+    # front_email_image = decode_image(front_image)
+    # front_email_image.add_header('Content-ID', '<front>')
+    # back_email_image = decode_image(back_image)
+    # back_email_image.add_header('Content-ID', '<back>')
+    # msg.attach(front_email_image)
+    # msg.attach(back_email_image)
 
     msg.mixed_subtype = 'related'
     msg.attach_alternative(html_content, 'text/html')
 
     msg.send()
+
+
+def decode_image(image_string):
+    image_data = re.sub('^data:image/.+;base64,', '', image_string).decode('base64')
+    return MIMEImage(cStringIO.StringIO(image_data))
