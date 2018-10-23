@@ -12,7 +12,7 @@ from api import models
 
 def send_report(style_id, quantities, ink_colors, addon_ids, email, comments, price, front_image, back_image):
     from_email = get_env_variable('EMAIL_REPORT_FROM')
-    to_emails = [get_env_variable('EMAIL_REPORT_RECIPIENT')]
+    to_emails = [get_env_variable('EMAIL_REPORT_RECIPIENT'), email]
 
     style = models.Style.objects.get(style_id=style_id)
 
