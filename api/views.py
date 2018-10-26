@@ -134,9 +134,11 @@ class CalculatePriceView(APIView):
         comments = request.GET.get('comments')
         email = request.GET.get('email')
 
+
         # parse comma separated numbers
         quantities = [int(x) for x in quantity_string.split(',')]
         addons = []
+
         if addon_string is not None and len(addon_string) > 0:
             addons = [int(x) for x in addon_string.split(',')]
 

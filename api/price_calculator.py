@@ -30,7 +30,7 @@ def calculate_price(style_id, quantities, ink_colors, addons):
     addon_price = 0
 
     for id in addons:
-        addon = models.Addon.objects.get(id)
+        addon = models.Addon.objects.get(id=id)
         addon_price += addon.cost
 
     total_price_per = base_price + addon_price

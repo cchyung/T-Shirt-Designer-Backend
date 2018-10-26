@@ -12,7 +12,7 @@ def send_report(style_id, quantities, ink_colors, addon_ids, email, comments, pr
 
     style = models.Style.objects.get(style_id=style_id)
 
-    addons = [models.Addon.objects.get(i).name for i in addon_ids]
+    addons = [models.Addon.objects.get(id=i).name for i in addon_ids]
 
     template_vars = {
         'email': email,
