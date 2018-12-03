@@ -133,6 +133,7 @@ class CalculatePriceView(APIView):
         addon_string = request.GET.get('addons')  # as string of comma-separated numbers
         comments = request.GET.get('comments')
         email = request.GET.get('email')
+        name = request.GET.get('name')
 
 
         # parse comma separated numbers
@@ -147,7 +148,7 @@ class CalculatePriceView(APIView):
             price = price_calculator.calculate_price(style_id, quantities, ink_colors, addons)
 
             # send email report
-            emailer.send_report(style_id, quantities, ink_colors, addons, email, comments, price, front_image, back_image)
+            emailer.send_report(style_id, quantities, ink_colors, addons, email, name, comments, price, front_image, back_image)
 
             # return calculated price
             response = Response({'price': price})

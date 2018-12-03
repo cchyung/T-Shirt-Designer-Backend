@@ -6,9 +6,10 @@ from tshirtpricetool.settings.base import get_env_variable
 from api import models
 
 
-def send_report(style_id, quantities, ink_colors, addon_ids, email, comments, price, front_image, back_image):
-    from_email = get_env_variable('EMAIL_REPORT_FROM')
+def send_report(style_id, quantities, ink_colors, addon_ids, email, name, comments, price, front_image, back_image):
+    from_email = "Kastlfel <" + get_env_variable('EMAIL_REPORT_FROM') + ">"
     to_emails = [get_env_variable('EMAIL_REPORT_RECIPIENT'), email]
+    email_subject = get_env_variable('EMAIL_REPORT_SUBJECT')
 
     style = models.Style.objects.get(style_id=style_id)
 
@@ -16,6 +17,7 @@ def send_report(style_id, quantities, ink_colors, addon_ids, email, comments, pr
 
     template_vars = {
         'email': email,
+        'name': name,
         'style': style.__str__(),
         'brand': style.brand,
         'quantities': quantities,
@@ -30,7 +32,7 @@ def send_report(style_id, quantities, ink_colors, addon_ids, email, comments, pr
     html_content = render_to_string('api/report_email.html', template_vars).replace("\n", "")
     text_content = strip_tags(html_content)
 
-    msg = EmailMultiAlternatives('Report from T Shirt Designer', text_content, from_email, to_emails)
+    msg = EmailMultiAlternatives(email_subject, text_content, from_email, to_emails)
 
     # embed images
     # front_email_image = decode_image(front_image)
