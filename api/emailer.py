@@ -10,6 +10,7 @@ def send_report(style_id, quantities, ink_colors, addon_ids, email, name, commen
     from_email = "Kastlfel <" + get_env_variable('EMAIL_REPORT_FROM') + ">"
     to_emails = [get_env_variable('EMAIL_REPORT_RECIPIENT'), email]
     email_subject = get_env_variable('EMAIL_REPORT_SUBJECT')
+    message = get_env_variable('EMAIL_REPORT_MESSAGE')
 
     style = models.Style.objects.get(style_id=style_id)
 
@@ -24,6 +25,7 @@ def send_report(style_id, quantities, ink_colors, addon_ids, email, name, commen
         'ink_colors': ink_colors,
         'addons': addons if len(addons) > 0 else 'No Addons',
         'comments': comments,
+        'message': message,
         'price': price,
         'front_image': front_image.__str__(),
         'back_image': back_image.__str__(),
