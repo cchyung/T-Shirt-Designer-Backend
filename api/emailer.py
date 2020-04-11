@@ -48,4 +48,3 @@ def send_report(style_id, quantities, ink_colors, addon_ids, email, name, commen
     msg.attach_alternative(html_content, 'text/html')
 
     msg.send()
-
